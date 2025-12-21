@@ -1,0 +1,39 @@
+server:
+  port: 1798
+  compression:
+    min-response-size: 2048
+    enabled: true
+  forward-headers-strategy: native
+  servlet:
+    context-path: /api
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: cozy
+  jpa:
+    open-in-view: false
+    show-sql: true
+
+  profiles:
+    active: ${ACTIVE_PROFILE:development}
+
+  liquibase:
+    change-log: classpath:db/db.changelog-master.xml
+
+  docker:
+    compose:
+      enabled: true
+      profiles:
+        active: development
+      lifecycle-management: start_and_stop
+
+  mvc:
+    problemdetails:
+      enabled: true
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+

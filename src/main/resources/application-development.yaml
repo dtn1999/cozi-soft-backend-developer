@@ -1,0 +1,27 @@
+server:
+  port: 1802
+  compression:
+    min-response-size: 2048
+    enabled: true
+  forward-headers-strategy: native
+  servlet:
+    context-path: /api
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  jpa:
+    properties:
+      hibernate:
+        generate_statistics: false
+  docker:
+    compose:
+      lifecycle-management: start_only
+# hibernate.session.events.log.LOG_QUERIES_SLOWER_THAN_MS=${VAL:12}
+
+logging:
+  level:
+    org.hibernate.stat: DEBUG
+    org.springframework.security: TRACE
+    com.digcockpit: DEBUG
+    org.springframework.web: DEBUG

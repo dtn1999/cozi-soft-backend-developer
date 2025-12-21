@@ -1,0 +1,45 @@
+{
+  "name": "Canton Gate Away",
+  "address": {
+    "city": "Canton",
+    "state": "Texas",
+    "street": "3540 vZ County Rd 2418",
+    "zipCode": "75103",
+    "country": "United States"
+  },
+  "description": "This is a test site",
+  "parcelArea": 1.0,
+  "annualInterestRate": 9.99,
+  "totalSiteArea": 100000.0,
+  "pricePerParcel": 5000000,
+  "medias": [
+    {
+      "url": "https://ream-server.com/canton-gate-away-0.jpg",
+      "type": "IMAGE"
+    },
+    {
+      "url": "https://ream-server.com/canton-gate-away-1.jpg",
+      "type": "IMAGE"
+    },
+    {
+      "url": "https://ream-server.com/canton-gate-away-2.jpg",
+      "type": "IMAGE"
+    },
+    {
+      "url": "https://ream-server.com/canton-gate-away-3.jpg",
+      "type": "IMAGE"
+    },
+    {
+      "url": "https://ream-server.com/canton-gate-away-4.jpg",
+      "type": "IMAGE"
+    }
+  ],
+  "coverImage": {
+    "type": "IMAGE",
+    "url": "https://ream-server.com/canton-gate-away.jpg",
+    "altText": "Canton Gate Away Picture"
+  },
+  "downPaymentPerParcel": 500000,
+  "contractProcessingFee": 30000,
+  "defaultLoanTermInMonths": 360
+}

@@ -1,0 +1,8 @@
+ext.ver = [
+        // utils
+        'vavrVersion'                      : '0.10.4',
+        'mapstructVersion'                 : '1.6.3',
+        'mapstructProcessorVersion'        : '1.6.3',
+        'lombokMapstructBindingVersion'    : '0.2.0',
+        'reactorAddonsVersion'             : '3.5.1',
+]

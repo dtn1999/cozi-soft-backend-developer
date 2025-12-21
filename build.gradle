@@ -1,0 +1,107 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.0.1'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id "org.openapi.generator" version "7.17.0"
+}
+
+apply from: './dependencies.gradle'
+
+
+group = 'com.cozi.soft'
+version = '0.0.1-SNAPSHOT'
+description = 'listing'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+    runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'org.springframework.boot:spring-boot-starter-liquibase'
+
+    // Generated code
+    implementation 'io.swagger.core.v3:swagger-annotations:2.2.6'
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.4'
+
+    implementation "io.vavr:vavr:${ver.vavrVersion}"
+    implementation "org.mapstruct:mapstruct:${ver.mapstructVersion}"
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor "org.mapstruct:mapstruct-processor:${ver.mapstructProcessorVersion}"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${ver.lombokMapstructBindingVersion}"
+
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation "io.vavr:vavr:${ver.vavrVersion}"
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:testcontainers-junit-jupiter'
+    testImplementation 'org.testcontainers:testcontainers-postgresql'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/openapi'
+        }
+    }
+}
+
+def openApiSpec = layout.projectDirectory.file("src/main/resources/openapi/listing-manager-api-spec.yaml").getAsFile().toString()
+
+tasks.register("generateApi", GenerateTask) {
+    generatorName.set("spring")
+    inputSpec.set(openApiSpec)
+    library.set("spring-boot")
+    outputDir.set("$buildDir/generated/openapi")
+    apiPackage.set("com.cozisoft.ream.api")
+    invokerPackage.set("com.cozisoft.ream.api")
+    modelPackage.set("com.cozisoft.ream.model")
+    modelNameSuffix.set("Dto")
+    generateApiDocumentation.set(false)
+    generateModelTests.set(false)
+    configOptions.set([
+            useJakartaEe           : "true",
+            skipDefaultInterface   : "true",
+            ignoreFileOverride     : "true",
+            sourceFolder           : "/",
+            serializableModel      : "true",
+            useEnumCaseInsensitive : "true",
+            implFolder             : "/",
+            interfaceOnly          : "true",
+            returnResponse         : "true",
+            generateApis           : "true",
+            generateModels         : "true",
+            generateBuilders       : "true",
+            generateSupportingFiles: "false",
+            useSpringBoot3         : "true",
+    ])
+}

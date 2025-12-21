@@ -1,0 +1,14 @@
+spring:
+  mvc:
+    problemdetails:
+      enabled: true
+
+  datasource:
+    url: jdbc:tc:postgis:16-3.4-alpine:///test_db?TC_INITSCRIPT=sql/init.sql
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+
+  main:
+    allow-bean-definition-overriding: true
+
+  liquibase:
+    change-log: classpath:db/db.changelog-master.xml

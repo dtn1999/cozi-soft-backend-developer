@@ -1,0 +1,451 @@
+openapi: 3.1.0
+info:
+  title: Real Estate Asset Manager (REAM) Backend API
+  version: 1.0.0
+servers:
+  - url: https://ream.cozi-soft.com/api
+    description: Production server
+  - url: http://localhost:1802/api
+    description: Local development server
+
+tags:
+  - name: ReamApi
+paths:
+  /listings/sites:
+    post:
+      tags:
+        - ReamApi
+      summary: Create a new site.
+      operationId: createSite
+      requestBody:
+        description: Site details.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSiteRequest"
+      responses:
+        "201":
+          description: Site successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Site"
+        "400":
+          $ref: "#/components/responses/ProblemDetailError"
+        "401":
+          $ref: "#/components/responses/ProblemDetailError"
+        "403":
+          $ref: "#/components/responses/ProblemDetailError"
+        "404":
+          $ref: "#/components/responses/ProblemDetailError"
+        "500":
+          $ref: "#/components/responses/ProblemDetailError"
+    get:
+      tags:
+        - ReamApi
+      summary: List all sites.
+      operationId: listSites
+      responses:
+        "200":
+          description: List of sites.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteCollection"
+        "401":
+          $ref: "#/components/responses/ProblemDetailError"
+        "403":
+          $ref: "#/components/responses/ProblemDetailError"
+        "404":
+          $ref: "#/components/responses/ProblemDetailError"
+        "500":
+          $ref: "#/components/responses/ProblemDetailError"
+  /listings/sites/{siteId}:
+    get:
+      tags:
+        - ReamApi
+      summary: Get details of a specific Site.
+      operationId: getSiteById
+      parameters:
+        - $ref: "#/components/parameters/SiteId"
+      responses:
+        "200":
+          description: Details of the Site.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Site"
+        "401":
+          $ref: "#/components/responses/ProblemDetailError"
+        "403":
+          $ref: "#/components/responses/ProblemDetailError"
+        "404":
+          $ref: "#/components/responses/ProblemDetailError"
+        "500":
+          $ref: "#/components/responses/ProblemDetailError"
+    patch:
+      tags:
+        - ReamApi
+      summary: Update details of a site.
+      operationId: patchSiteById
+      parameters:
+        - $ref: "#/components/parameters/SiteId"
+      requestBody:
+        description: Listing update details.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchSiteRequest"
+      responses:
+        "200":
+          description: Site successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Site"
+        "400":
+          $ref: "#/components/responses/ProblemDetailError"
+        "401":
+          $ref: "#/components/responses/ProblemDetailError"
+        "403":
+          $ref: "#/components/responses/ProblemDetailError"
+        "404":
+          $ref: "#/components/responses/ProblemDetailError"
+        "500":
+          $ref: "#/components/responses/ProblemDetailError"
+    delete:
+      tags:
+        - ReamApi
+      summary: Delete a specific site.
+      operationId: deleteSiteById
+      parameters:
+        - $ref: "#/components/parameters/SiteId"
+      responses:
+        "204":
+          description: Site successfully deleted.
+          content: { }
+        "401":
+          $ref: "#/components/responses/ProblemDetailError"
+        "403":
+          $ref: "#/components/responses/ProblemDetailError"
+        "404":
+          $ref: "#/components/responses/ProblemDetailError"
+        "500":
+          $ref: "#/components/responses/ProblemDetailError"
+components:
+  parameters:
+    SiteId:
+      in: path
+      name: siteId
+      description: ID of a listing
+      required: true
+      schema:
+        $ref: "#/components/schemas/ID"
+
+  responses:
+    ProblemDetailError:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetail"
+  schemas:
+    ID:
+      type: integer
+      format: int64
+
+    Price:
+      type: integer
+      format: int64
+
+    Area:
+      type: number
+      format: double
+
+    BaseCollection:
+      type: object
+      required:
+        - page
+        - total
+        - limit
+        - offset
+      properties:
+        page:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+
+    #################################################
+    #               Listing                         #
+    #################################################
+    ListingType:
+      type: string
+      enum:
+        - SITE
+        - BUILDING
+        - PLOT_OF_LAND
+
+    SiteState:
+      type: string
+      enum:
+        - DRAFT
+        - SOLD_OUT
+        - ARCHIVED
+        - PUBLISHED
+
+    AreaUnit:
+      type: string
+      enum:
+        - ACRES
+        - HECTARES
+        - SQUARE_FEET
+        - SQUARE_METERS
+
+    ListingMediaType:
+      type: string
+      enum:
+        - IMAGE
+        - VIDEO
+        - DOCUMENT
+
+    CreateSiteRequest:
+      type: object
+      required:
+        - name
+        - parcelArea
+        - totalSiteArea
+        - numberOfParcels
+      properties:
+        name:
+          type: string
+        parcelArea:
+          $ref: "#/components/schemas/Area"
+        totalSiteArea:
+          $ref: "#/components/schemas/Area"
+        numberOfParcels:
+          type: integer
+          format: int32
+
+    MediaRequest:
+      type: object
+      required:
+        - url
+        - type
+      properties:
+        url:
+          type: string
+          format: uri
+        type:
+          $ref: "#/components/schemas/ListingMediaType"
+
+    PatchSiteRequest:
+      type: object
+      required: [ ]
+      properties:
+        name:
+          type: string
+        parcelArea:
+          $ref: "#/components/schemas/Area"
+        totalSiteArea:
+          $ref: "#/components/schemas/Area"
+        numberOfParcels:
+          type: integer
+          format: int32
+        pricePerParcel:
+          $ref: "#/components/schemas/Price"
+        monthlyTaxesFee:
+          $ref: "#/components/schemas/Price"
+        annualInterestRate:
+          type: number
+          format: double
+        contractProcessingFee:
+          $ref: "#/components/schemas/Price"
+        defaultLoanTermInMonths:
+          type: integer
+          format: int32
+        downPaymentPerParcel:
+          $ref: "#/components/schemas/Price"
+        description:
+          type: string
+        coverImage:
+          $ref: "#/components/schemas/ListingMedia"
+        medias:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaRequest"
+        documents:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaRequest"
+        address:
+          $ref: "#/components/schemas/ListingAddress"
+
+    RemoveMediaRequest:
+      type: object
+      required:
+        - medias
+      properties:
+        medias:
+          type: array
+          items:
+            $ref: "#/components/schemas/ID"
+
+    ListingMedia:
+      type: object
+      required:
+        - type
+        - url
+      properties:
+        type:
+          $ref: "#/components/schemas/ListingMediaType"
+        url:
+          type: string
+          format: uri
+        altText:
+          type: string
+
+    Site:
+      type: object
+      required:
+        - id
+        - name
+        - state
+        - medias
+        - address
+        - deleted
+        - createAt
+        - documents
+        - updatedAt
+        - coverImage
+        - parcelArea
+        - plotsOfLand
+        - organization
+        - totalSiteArea
+        - pricePerParcel
+        - numberOfParcels
+        - parcelMonthlyTaxesFee
+        - annualInterestRate
+        - downPaymentPerParcel
+        - contractProcessingFee
+        - defaultLoanTermInMonths
+        - monthlyPaymentPerParcel
+      properties:
+        id:
+          $ref: "#/components/schemas/ID"
+        parcelMonthlyTaxesFee:
+          $ref: "#/components/schemas/Price"
+        contractProcessingFee:
+          $ref: "#/components/schemas/Price"
+        defaultLoanTermInMonths:
+          type: integer
+          format: int32
+        name:
+          type: string
+        medias:
+          type: array
+          items:
+            $ref: "#/components/schemas/ListingMedia"
+        documents:
+          type: array
+          items:
+            $ref: "#/components/schemas/ListingMedia"
+        coverImage:
+          $ref: "#/components/schemas/ListingMedia"
+        address:
+          $ref: "#/components/schemas/ListingAddress"
+        deleted:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        state:
+          $ref: "#/components/schemas/SiteState"
+        updatedAt:
+          type: string
+          format: date-time
+        parcelArea:
+          $ref: "#/components/schemas/Area"
+        totalSiteArea:
+          $ref: "#/components/schemas/Area"
+        pricePerParcel:
+          $ref: "#/components/schemas/Price"
+        annualInterestRate:
+          type: number
+          format: double
+        numberOfParcels:
+          type: integer
+          format: int32
+        downPaymentPerParcel:
+          $ref: "#/components/schemas/Price"
+        monthlyPaymentPerParcel:
+          $ref: "#/components/schemas/Price"
+
+    SiteCollection:
+      allOf:
+        - $ref: "#/components/schemas/BaseCollection"
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/Site"
+
+    ListingAddress:
+      type: object
+      required:
+        - city
+        - state
+        - street
+        - zipCode
+        - country
+      properties:
+        id:
+          $ref: "#/components/schemas/ID"
+        city:
+          type: string
+        state:
+          type: string
+        street:
+          type: string
+        zipCode:
+          type: string
+        country:
+          type: string
+        longitude:
+          type: number
+          format: double
+        latitude:
+          type: number
+          format: double
+
+
+    ProblemDetail:
+      type: object
+      required:
+        - title
+        - status
+        - detail
+      properties:
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+        type:
+          type: string
+
