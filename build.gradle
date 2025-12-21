@@ -75,6 +75,10 @@ sourceSets {
     }
 }
 
+tasks.findByName("openApiGenerate").enabled = false
+compileJava.dependsOn tasks.withType(GenerateTask)
+compileTestJava.dependsOn tasks.withType(GenerateTask)
+
 def openApiSpec = layout.projectDirectory.file("src/main/resources/openapi/listing-manager-api-spec.yaml").getAsFile().toString()
 
 tasks.register("generateApi", GenerateTask) {
