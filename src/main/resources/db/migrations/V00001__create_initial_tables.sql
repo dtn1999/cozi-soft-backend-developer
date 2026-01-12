@@ -1,8 +1,6 @@
 --liquibase formatted sql
 
 --changeset dtn1999:create_initial_tables
-CREATE SCHEMA IF NOT EXISTS listing_service;
-
 DROP TABLE IF EXISTS SITE;
 DROP TABLE IF EXISTS MEDIA;
 DROP TABLE IF EXISTS SITE_MEDIA;
