@@ -1,7 +1,7 @@
 --liquibase formatted sql
 
 --changeset dtn1999:create_initial_tables
-SET search_path TO listing_service;
+CREATE SCHEMA IF NOT EXISTS listing_service;
 
 DROP TABLE IF EXISTS SITE;
 DROP TABLE IF EXISTS MEDIA;

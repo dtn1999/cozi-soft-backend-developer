@@ -17,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Accessors(chain = true)
 @SuperBuilder(toBuilder = true)
-@Table(name = "site", schema = "listing_service")
+@Table(name = "site")
 public class Site extends BaseEntity {
     @Column(name = "name")
     private String name;
